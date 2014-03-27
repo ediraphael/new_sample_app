@@ -1,0 +1,54 @@
+<table class="profile" summary="Information profil">
+	<tr>
+		<td class="main">
+			<h1>
+				<%= @user.nom %>
+			</h1>
+		</td>
+		<td class="sidebar round">
+			<strong>Nom</strong> <%= @user.nom %><br />
+			<strong>URL</strong> <%= link_to user_path(@user), @user %>
+			<% if signed_in? &&  (current_user==@user || current_user.admin?) %>
+			<br /><strong><%= link_to "Modifier le profil", edit_user_path(@user) %></strong>
+			<% end %>
+			<br /><a href="#" onClick="afficher_masquer_sport_option('#tr_sport')">Afficher/cacher "Aimerait faire du sport"</a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Email : <%= @user.email %></td>
+	</tr>
+	<tr>
+		<td colspan="2">Naissance : <%= @user.dateNaissance  %></td>
+	</tr>
+	<tr>
+		<td colspan="2">Taille (cm) : <%= @user.taille %></td>
+	</tr>
+	<tr>
+		<td colspan="2">Poid : <%= @user.poid %></td>
+	</tr>
+	<tr>
+		<td colspan="2">Poid Idéal : <%= @user.poidIdeal %></td>
+	</tr>
+	<tr>
+		<td colspan="2">IMC : <%= @user.imc %></td>
+	</tr>
+	<tr>
+		<td colspan="2">Sport : <%= (@user.sport?)?"Oui":"Non" %></td>
+	</tr>
+	<tr id="tr_sport">
+		<td colspan="2">Aimerait faire du sport : <%= (@user.aimeSport?)?"Oui":"Non" %></td>
+	</tr>
+	<% if @user.cv.size %>
+    <tr>
+		<td colspan="2">
+			Cv : <%= link_to image_tag("Pdf.ico", size: "25x25"), @user.cv.url(:original, false) %>
+			<%= image_tag @user.cv.url(:thumb)%>
+		</td>
+    </tr>
+	<% end %>
+	<% if current_user && current_user.admin? %>
+	<tr>
+		<td colspan="2">Administrateur : <%= (@user.admin?)?"Oui":"Non" %></td>
+	</tr>
+	<% end %>
+</table>

@@ -1,0 +1,79 @@
+<h1>Edition du profil</h1>
+
+<%= form_for(@user) do |f| %>
+<%= render 'shared/error_messages', :object => f.object %>
+<!--<a href="#" onClick="afficher_masquer_sport_option('#div_sport')">Afficher/cacher "Aimerait faire du sport"</a>-->
+<div class="panel" >
+	<div class="panel_gauche">
+		<div class="field">
+			<%= f.label :nom, "Nom" %><br />
+			<%= f.text_field :nom %>
+		</div>
+		<div class="field">
+			<%= f.label :email, "Email" %><br />
+			<%= f.text_field :email %>
+		</div>
+		<div class="field">
+			<%= f.label :password, "Mot de passe" %><br />
+			<%= f.password_field :password %>
+		</div>
+		<div class="field">
+			<%= f.label :password_confirmation, "Confirmation mot de passe" %><br />
+			<%= f.password_field :password_confirmation %>
+		</div>
+	</div>
+
+	<div class="panel_droit">
+		<div class="field" style="position: relative">
+			<%= f.label :dateNaissance, "Naissance" %><br />
+			<%= f.text_field :dateNaissance %>
+		</div>
+		<div class="field">
+			<%= f.label :taille, "Taille (cm)" %><br />
+			<%= f.text_field :taille %>
+		</div>
+		<div class="field">
+			<%= f.label :poid, "Poid" %><br />
+			<%= f.text_field :poid %>
+		</div>
+		<div class="field">
+			<%= f.label :poidIdeal, "Poid Ideal" %><br />
+			<%= f.text_field :poidIdeal %>
+		</div>
+		<div class="field">
+			<%= f.label "Pratiquez vous un sport ?" %>
+			<%= f.label "Oui" %><%= f.radio_button :sport, 1, {:checked => @user.sport?, :onChange =>'afficher_masquer_sport_option(\'#div_sport\')'}%>
+			<%= f.label "Non" %><%= f.radio_button :sport, 0, {:checked => !@user.sport?, :onChange =>'afficher_masquer_sport_option(\'#div_sport\')'} %>
+		</div>
+		<div class="field" id="div_sport" <%= (@user.sport?)?'style=display:none':'' %> >
+			<%= f.label "Souhaitez faire du sport ?" %>
+			<%= f.label "Oui" %><%= f.radio_button :aimeSport, 1, :checked => @user.aimeSport? %>
+			<%= f.label "Non" %><%= f.radio_button :aimeSport, 0, :checked => !@user.aimeSport? %>
+		</div>
+		<div class="field">
+			<%= f.label "CV : " %>
+			<%= f.file_field :cv %>
+		</div>
+		<% if current_user.admin? %>
+		<div class="field">
+			<% disab = (current_user == @user)?true:false %>
+			<%= f.label "Est un administrateur ?" %>
+			<%= f.label "Oui" %><%= f.radio_button :admin, 1, {:checked => @user.admin?, :disabled => disab} %>
+			<%= f.label "Non" %><%= f.radio_button :admin, 0, {:checked => !@user.admin?, :disabled => disab} %>
+		</div>
+		<% end %>
+	</div>
+
+	<div class="clearer"></div>
+</div>
+<div class="actions">
+	<%= f.submit "Update" %>
+</div>
+<% end %>
+
+<script>
+	$(function() {
+		$( "#user_<%= :dateNaissance %>" ).datepicker();
+	});
+</script>
+
