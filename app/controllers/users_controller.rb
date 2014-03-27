@@ -31,6 +31,12 @@ class UsersController < ApplicationController
 	def index
 		@titre = "Liste des utilisateurs"
 		@users = User.all
+
+	end
+	
+	def liste
+		@titre = "Liste des utilisateurs"
+		@users = User.all
 	end
 	
 	def listeNonSportifVoulantFaireDuSport

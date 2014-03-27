@@ -1,12 +1,25 @@
-<h1 style="display:inline-block">Liste des Utilisateurs</h1>
-<ul style="display:inline-block">
-	<li><%= link_to "Tous les utilisateurs", users_path %></li>
-	<li><%= link_to "Non Sportifs voulant faire du sport", listeNonSportifVoulantFaireDuSport_path %></li>
-</ul>
-<div class="clearer"></div>
-<p>Télécharger la liste des utilisateurs en pdf <%= link_to image_tag("pdf.png", size: "25x25"), "/users.pdf"%></p>
-<a href="#" onClick="afficher_masquer_sport_option('[name=\'sport_option\']')">Afficher/cacher "Aimerait faire du sport"</a>
-<table>
+<% if request.env['PATH_INFO'] == listeNonSportifVoulantFaireDuSport_path %>
+	<h1 class="print_utilisateur" >Liste des Utilisateurs non sportif</h1>
+<% else %>
+	<h1 class="print_utilisateur" >Liste des Utilisateurs</h1>
+<% end %>
+<div class="bloc_entete_users">
+	<h1 style="display:inline-block">Liste des Utilisateurs</h1>
+	<ul style="display:inline-block">
+		<li><%= link_to "Tous les utilisateurs", users_path %></li>
+		<li><%= link_to "Non Sportifs voulant faire du sport", listeNonSportifVoulantFaireDuSport_path %></li>
+	</ul>
+	<div class="clearer"></div>
+	<% if request.env['PATH_INFO'] == listeNonSportifVoulantFaireDuSport_path %>
+		<p>Télécharger la liste des utilisateurs non sportif en pdf <%= link_to image_tag("pdf.png", size: "25x25"), listeNonSportifVoulantFaireDuSport_path+".pdf"%></p>
+	<% else %>
+		<p>Télécharger la liste des utilisateurs en pdf <%= link_to image_tag("pdf.png", size: "25x25"), users_path+".pdf"%></p>
+	<% end %>
+	
+	<a href="#" onClick="afficher_masquer_sport_option('[name=\'sport_option\']')">Afficher/cacher "Aimerait faire du sport"</a>
+</div>
+
+<table id="liste_utilisateur">
 	<tr style="background:#DDDDDD" >
 		<th>Utilisateur</th>
 		<th>Email</th>
@@ -17,14 +30,14 @@
 		<th>IMC</th>
 		<th>Fait du sport</th>
 		<th name="sport_option">Aimerait faire du sport</th>
-		<th>CV</th>
+		<th class="cv_table">CV</th>
 		<% if current_user && current_user.admin? %>
-		<th>Action</th>
+		<th class="action_table">Action</th>
 		<% end %>
 	</tr>
 <% @users.each do |user| %>
 	<tr>
-		<td><%= link_to user.nom,user_path(user) %></td>
+		<td><p class="print_utilisateur" ><%= user.nom %></p><%= link_to user.nom,user_path(user) %></td>
 		<td><%= user.email%></td>
 		<td><%= user.age %></td>
 		<td><%= user.taille %></td>
@@ -33,12 +46,12 @@
 		<td><%= user.imc %></td>
 		<td><%= (user.sport)?"Oui":"Non" %></td>
 		<td name="sport_option"><%= (user.aimeSport)?"Oui":"Non" %></td>
-		<td>
+		<td class="cv_table">
 			<% if user.cv_file_name %>
 				<%= link_to image_tag("Télécharger.ico", size: "25x25"), user.cv.url(:original, false) %>
 			<% end %>
 		</td>
-		<td>
+		<td class="action_table">
 		<% if current_user && current_user.admin? %>
 		<%= link_to "modifier", edit_user_path(user) %>
 		| <%= link_to "supprimer", user, :method => :delete, :confirm => "Etes-vous certain ?",

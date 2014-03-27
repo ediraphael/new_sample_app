@@ -216,4 +216,32 @@ div.panel_droit {
 .clearer {
     clear: both;
 }
+.print_utilisateur {
+	display: none;
+  }
+
+@media print {
+  body {
+    background-color: #FFF;
+  }
+  
+  header {
+	display :none;	   
+  }
+
+  #container {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  
+  #line_items {
+    page-break-before: always;
+  }
+  
+  #pdf_link {
+    display: none;
+  }
+}
 
