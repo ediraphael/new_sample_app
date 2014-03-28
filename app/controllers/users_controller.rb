@@ -34,11 +34,6 @@ class UsersController < ApplicationController
 
 	end
 	
-	def liste
-		@titre = "Liste des utilisateurs"
-		@users = User.all
-	end
-	
 	def listeNonSportifVoulantFaireDuSport
 		@users = User.where(sport: false, aimeSport:true)
 		@titre = "Liste des utilisateurs non sportif"

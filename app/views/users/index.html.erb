@@ -61,3 +61,78 @@
 	</tr>
 <% end %>
 </table>
+<canvas id="myChart" class="graphique" width="900" height="600"></canvas>
+<canvas id="myChart2" class="graphique" width="900" height="600"></canvas>
+<script>
+<% 
+@users_nom = Array.new
+@users_poid = Array.new
+@users_poid_ideaux = Array.new
+@tableau_imc = Array.new
+@tableau_imc_value = Array.new
+@tableau_imc_nom = Array.new
+
+@users.each do |user|
+	@users_nom << [user.nom]
+	@users_poid << [user.poid]
+	@users_poid_ideaux << [user.poidIdeal]
+end
+
+repartition_imc = []
+@users.each do |user|
+	repartition_imc << user.imc.split(/\s:\s/)[0]
+end
+
+counts = Hash.new(0)
+for imc in repartition_imc
+	counts[imc] += 1
+end
+
+counts.each do |k,v|
+	@tableau_imc << [k,(v.to_f/counts.count)*100]
+	@tableau_imc_nom << k
+	@tableau_imc_value << (v.to_f/counts.count)*100
+end
+@tableau_imc_cle = Hash[@tableau_imc.map.with_index.to_a]
+
+%>
+var data = {
+	labels : <%= @users_nom.to_json.html_safe %>,
+	datasets : [
+		{
+			fillColor : "rgba(220,220,220,0.5)",
+			strokeColor : "rgba(220,220,220,1)",
+			labels : ["tottt"],
+			data : <%= @users_poid.to_json %>
+		},
+		{
+			fillColor : "rgba(151,187,205,0.5)",
+			strokeColor : "rgba(151,187,205,1)",
+			data : <%= @users_poid_ideaux.to_json %>
+		}
+	]
+}
+
+var options = {}
+var ctx = document.getElementById("myChart").getContext("2d");
+
+var myNewChart = new Chart(ctx).Bar(data,options);
+
+var data2 = {
+	labels : <%= @tableau_imc_nom.to_json.html_safe %>,
+	datasets : [
+		{
+			fillColor : "rgba(220,220,220,0.5)",
+			strokeColor : "rgba(220,220,220,1)",
+			pointColor : "rgba(220,220,220,1)",
+			pointStrokeColor : "#fff",
+			data : <%=  @tableau_imc_value.to_json %>
+		}
+	]
+}
+var options2 = {}
+var ctx2 = document.getElementById("myChart2").getContext("2d");
+var myNewChart2 = new Chart(ctx2).Line(data2,options2);
+
+
+</script>
