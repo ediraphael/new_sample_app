@@ -22,7 +22,6 @@ end
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'jqplot-rails'
 
 gem 'paperclip', '3.5.3'
 
